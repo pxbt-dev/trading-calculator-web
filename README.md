@@ -14,9 +14,9 @@ A Spring Boot web application for calculating optimal trading position sizes bas
 - **📱 Responsive Design**: Works on desktop, tablet, and mobile
 - **⚡ Single-Page**: Results display on the same page without reloading
 
-## Live Demo
+## Live 🚀
 
-🚀 **Coming soon!** Deploying to Railway...
+**🌐**: [tradingpositionsizecalculator.com](https://www.tradingpositionsizecalculator.com/)
 
 ## Future Roadmap 
 - Android version in development (Java/Kotlin)
