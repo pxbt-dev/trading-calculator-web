@@ -18,6 +18,12 @@ A Spring Boot web application for calculating optimal trading position sizes bas
 
 🚀 **Coming soon!** Deploying to Railway...
 
+## Future Roadmap 
+- Android version in development (Java/Kotlin)
+- iOS version planned (Swift/SwiftUI)
+- Binance API integration for live market data
+- Progressive Web App (PWA) features for mobile experience
+
 ## Quick Start
 
 ```bash
@@ -28,3 +34,4 @@ git clone https://github.com/pxbt-dev/trading-calculator-web.git
 ./mvnw spring-boot:run
 
 # Visit http://localhost:8080
+
