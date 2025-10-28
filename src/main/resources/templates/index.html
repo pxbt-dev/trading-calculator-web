@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trading Position Size Calculator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        button { background: #007cba; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            border-left: 4px solid #007cba;
+        }
+        .error {
+            color: red;
+            background: #ffe6e6;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+<h1>💰 Trading Position Size Calculator</h1>
+
+<form action="/calculate" method="post">
+    <div class="form-group">
+        <label>Account Size ($):</label>
+        <input type="number" name="accountSize" value="10000" step="0.01" required>
+    </div>
+
+    <div class="form-group">
+        <label>Amount to Risk ($):</label>
+        <input type="number" name="riskDollars" value="100" step="0.01" required>
+    </div>
+
+    <div class="form-group">
+        <label>Entry Price:</label>
+        <input type="number" name="entryPrice" step="0.0001" required>
+    </div>
+
+    <div class="form-group">
+        <label>Stop Loss Price:</label>
+        <input type="number" name="stopLoss" step="0.0001" required>
+    </div>
+
+    <div class="form-group">
+        <label>Target Price (optional):</label>
+        <input type="number" name="targetPrice" step="0.0001">
+    </div>
+
+    <button type="submit">Calculate Position Size</button>
+    <button type="button" onclick="clearForm()">Clear</button>
+</form>
+
+<!-- Results Section - Shows on same page -->
+<div th:if="${result}" class="result">
+    🎯 POSITION SIZE CALCULATION
+    ════════════════════════════════
+    Account Size:        <span th:text="${formattedAccountSize}"></span>
+    Amount to Risk:      <span th:text="${formattedRiskDollars}"></span>
+    Risk Percentage:     <span th:text="${formattedRiskPercentage}"></span>
+    Entry Price:         <span th:text="${formattedEntryPrice}"></span>
+    Stop Loss:           <span th:text="${formattedStopLoss}"></span>
+    Risk Per Unit:       <span th:text="${formattedRiskPerUnit}"></span>
+    ────────────────────────────────
+    UNITS TO BUY:        <span th:text="${formattedUnitsToBuy}"></span>
+    POSITION SIZE:       <span th:text="${formattedPositionSize}"></span>
+    ════════════════════════════════
+</div>
+
+<div th:if="${error}" class="error">
+    Error: <span th:text="${error}"></span>
+</div>
+
+<script>
+    function clearForm() {
+        document.querySelector('form').reset();
+        // Also clear any displayed results
+        window.location.href = '/';
+    }
+</script>
+</body>
+</html>

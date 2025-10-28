@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculation Results</title>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .result { white-space: pre-wrap; font-family: monospace; background: #f8f9fa; padding: 15px; border-radius: 4px; }
+        .back-btn { background: #6c757d; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin-top: 20px; }
+    </style>
+</head>
+<body>
+<h1>📊 Calculation Results</h1>
+
+<div class="result">
+    🎯 POSITION SIZE CALCULATION
+    ════════════════════════════════
+    Account Size:        <span th:text="${formattedAccountSize}"></span>
+    Amount to Risk:      <span th:text="${formattedRiskDollars}"></span>
+    Risk Percentage:     <span th:text="${formattedRiskPercentage}"></span>
+    Entry Price:         <span th:text="${formattedEntryPrice}"></span>
+    Stop Loss:           <span th:text="${formattedStopLoss}"></span>
+    Risk Per Unit:       <span th:text="${formattedRiskPerUnit}"></span>
+    ────────────────────────────────
+    UNITS TO BUY:        <span th:text="${formattedUnitsToBuy}"></span>
+    POSITION SIZE:       <span th:text="${formattedPositionSize}"></span>
+    ════════════════════════════════
+</div>
+
+<button class="back-btn" onclick="window.history.back()">← Back to Calculator</button>
+<button class="back-btn" onclick="window.location.href='/'">New Calculation</button>
+</body>
+</html>
