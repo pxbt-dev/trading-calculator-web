@@ -15,6 +15,7 @@ public class LoggingConfig {
             DateTimeFormatter.ISO_INSTANT;
 
     public static void setupSystemLogging() {
+
         // Configure system properties for better console logging
         System.setProperty("java.util.logging.SimpleFormatter.format",
                 "[%1$tF %1$tT] [%4$-7s] %5$s %6$s%n");

@@ -56,7 +56,7 @@ public class CalculatorController {
             model.addAttribute("result", result);
             model.addAttribute("hasTarget", targetPrice != null);
 
-            // ADD FORMATTED STRINGS
+            // Add formatted strings
             model.addAttribute("formattedAccountSize", currencyFormat.format(params.getAccountSize()));
             model.addAttribute("formattedRiskDollars", currencyFormat.format(params.getRiskDollars()));
             model.addAttribute("formattedEntryPrice", currencyFormat.format(params.getEntryPrice()));
