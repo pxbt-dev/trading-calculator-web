@@ -26,7 +26,7 @@ A Spring Boot web application for calculating optimal trading position sizes bas
 ## Future Roadmap 
 - Bug fixes
   - clean code / structure up (.css for e.g)
-  - Fix formatting issues on mobile,
+  - Fix formatting issues on mobile
   - Add tab to calculate Short position
 - improvements
   - Java version upgrade (17 → 21/LTS)
