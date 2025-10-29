@@ -5,89 +5,351 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
-        button { background: #007cba; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
-        .result {
+        :root {
+            --terminal-bg: #0a0a0a;
+            --terminal-text: #00ff00;
+            --terminal-border: #003300;
+            --terminal-accent: #00cc00;
+            --terminal-highlight: #008800;
+            --terminal-disabled: #004400;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: var(--terminal-bg);
+            color: var(--terminal-text);
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 2px solid var(--terminal-border);
             margin-top: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--terminal-text);
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            border-bottom: 1px solid var(--terminal-border);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            font-weight: normal;
+            letter-spacing: 2px;
+            grid-column: 1 / -1;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
             padding: 15px;
-            background: #f8f9fa;
-            border-radius: 4px;
-            white-space: pre-wrap;
-            font-family: monospace;
-            border-left: 4px solid #007cba;
+            border: 1px solid var(--terminal-border);
+            background: rgba(0, 20, 0, 0.3);
         }
-        .error {
-            color: red;
-            background: #ffe6e6;
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--terminal-accent);
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            letter-spacing: 1px;
+        }
+
+        input {
+            width: 100%;
             padding: 10px;
-            border-radius: 4px;
-            margin-top: 15px;
+            background: var(--terminal-bg);
+            border: 1px solid var(--terminal-border);
+            border-radius: 0;
+            color: var(--terminal-text);
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
         }
-        .hidden { display: none; }
+
+        input:focus {
+            outline: none;
+            border-color: var(--terminal-accent);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+
+        button {
+            background: var(--terminal-bg);
+            color: var(--terminal-text);
+            padding: 12px 25px;
+            border: 1px solid var(--terminal-border);
+            border-radius: 0;
+            cursor: pointer;
+            margin: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: var(--terminal-highlight);
+            border-color: var(--terminal-accent);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
+        }
+
+        .result-panel {
+            background: rgba(0, 30, 0, 0.3);
+            border: 1px solid var(--terminal-border);
+            padding: 20px;
+            min-height: 300px;
+            border-left: 3px solid var(--terminal-accent);
+            box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.1);
+        }
+
+        .result-content {
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            line-height: 1.4;
+        }
+
+        .error {
+            color: #ff4444;
+            background: rgba(255, 0, 0, 0.1);
+            padding: 15px;
+            border: 1px solid #ff4444;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            grid-column: 1 / -1;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .terminal-header {
+            text-align: center;
+            color: var(--terminal-accent);
+            margin-bottom: 30px;
+            font-size: 0.9em;
+            grid-column: 1 / -1;
+        }
+
+        .terminal-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid var(--terminal-border);
+            color: var(--terminal-disabled);
+            font-size: 0.8em;
+            grid-column: 1 / -1;
+        }
+
+        .button-group {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Retro scanlines effect */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                    rgba(0, 255, 0, 0.03) 50%,
+                    rgba(0, 0, 0, 0.1) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0.3;
+        }
     </style>
 </head>
 <body>
-<h1>💰 Trading Position Size Calculator</h1>
-
-<form action="/calculate" method="post">
-    <div class="form-group">
-        <label>Account Size ($):</label>
-        <input type="number" name="accountSize" value="10000" step="0.01" required>
-    </div>
-
-    <div class="form-group">
-        <label>Amount to Risk ($):</label>
-        <input type="number" name="riskDollars" value="100" step="0.01" required>
-    </div>
-
-    <div class="form-group">
-        <label>Entry Price:</label>
-        <input type="number" name="entryPrice" step="0.0001" required>
-    </div>
-
-    <div class="form-group">
-        <label>Stop Loss Price:</label>
-        <input type="number" name="stopLoss" step="0.0001" required>
-    </div>
-
-    <div class="form-group">
-        <label>Target Price (optional):</label>
-        <input type="number" name="targetPrice" step="0.0001">
-    </div>
-
-    <button type="submit">Calculate Position Size</button>
-    <button type="button" onclick="clearForm()">Clear</button>
-</form>
-
-<!-- Results Section - Shows on same page -->
-<div th:if="${result}" class="result">
-    🎯 POSITION SIZE CALCULATION
-    ════════════════════════════════
-    Account Size:        <span th:text="${formattedAccountSize}"></span>
-    Amount to Risk:      <span th:text="${formattedRiskDollars}"></span>
-    Risk Percentage:     <span th:text="${formattedRiskPercentage}"></span>
-    Entry Price:         <span th:text="${formattedEntryPrice}"></span>
-    Stop Loss:           <span th:text="${formattedStopLoss}"></span>
-    Risk Per Unit:       <span th:text="${formattedRiskPerUnit}"></span>
-    ────────────────────────────────
-    UNITS TO BUY:        <span th:text="${formattedUnitsToBuy}"></span>
-    POSITION SIZE:       <span th:text="${formattedPositionSize}"></span>
-    ════════════════════════════════
+<div class="terminal-header">
+    ⚡ TRADING POSITION SIZE CALCULATOR ⚡
 </div>
 
-<div th:if="${error}" class="error">
-    Error: <span th:text="${error}"></span>
+<h1>POSITION SIZE CALCULATOR</h1>
+
+<div class="container">
+    <!-- Left Column - Form -->
+    <div class="form-column">
+        <form id="calculatorForm">
+            <div class="form-group">
+                <label>Account Size ($):</label>
+                <input type="number" id="accountSize" value="1500" step="0.01" required placeholder="Enter account size...">
+            </div>
+
+            <div class="form-group">
+                <label>Amount to Risk ($):</label>
+                <input type="number" id="riskDollars" value="10" step="0.01" required placeholder="Enter risk amount...">
+            </div>
+
+            <div class="form-group">
+                <label>Entry Price:</label>
+                <input type="number" id="entryPrice" value="1.15" step="0.0001" required placeholder="Enter entry price...">
+            </div>
+
+            <div class="form-group">
+                <label>Stop Loss Price:</label>
+                <input type="number" id="stopLoss" value="1.2" step="0.0001" required placeholder="Enter stop loss...">
+            </div>
+
+            <div class="form-group">
+                <label>Target Price (optional):</label>
+                <input type="number" id="targetPrice" step="0.0001" placeholder="Enter target price...">
+            </div>
+
+            <div class="button-group">
+                <button type="button" onclick="calculatePosition()">CALCULATE</button>
+                <button type="button" onclick="clearForm()">CLEAR</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Right Column - Results -->
+    <div class="results-column">
+        <div class="result-panel">
+            <div id="result" class="result-content hidden"></div>
+            <div id="defaultMessage" class="result-content">
+                Enter your trading parameters and click CALCULATE to see your optimal position size and risk metrics.
+                ─────────────────────────────
+                [Waiting for input...]
+            </div>
+        </div>
+    </div>
+
+    <div id="error" class="error hidden"></div>
+</div>
+
+<div class="terminal-footer">
+    © 2025
 </div>
 
 <script>
-    function clearForm() {
-        document.querySelector('form').reset();
-        // Also clear any displayed results
-        window.location.href = '/';
+    function calculatePosition() {
+        // Clear previous results
+        document.getElementById('result').classList.add('hidden');
+        document.getElementById('defaultMessage').classList.add('hidden');
+        document.getElementById('error').classList.add('hidden');
+
+        // Get input values
+        const accountSize = parseFloat(document.getElementById('accountSize').value);
+        const riskDollars = parseFloat(document.getElementById('riskDollars').value);
+        const entryPrice = parseFloat(document.getElementById('entryPrice').value);
+        const stopLoss = parseFloat(document.getElementById('stopLoss').value);
+        const targetPrice = parseFloat(document.getElementById('targetPrice').value) || null;
+
+        // Validation
+        if (!accountSize || !riskDollars || !entryPrice || !stopLoss) {
+            showError('Please fill in all required fields');
+            return;
+        }
+
+        if (riskDollars > accountSize) {
+            showError('Risk amount cannot exceed account size');
+            return;
+        }
+
+        if (entryPrice <= 0 || stopLoss <= 0) {
+            showError('Prices must be positive values');
+            return;
+        }
+
+        // Calculate position size
+        const priceDifference = Math.abs(entryPrice - stopLoss);
+        const positionSize = riskDollars / priceDifference;
+        const totalValue = positionSize * entryPrice;
+        const riskPercentage = (riskDollars / accountSize) * 100;
+
+        // Calculate R:R if target provided
+        let riskReward = 'N/A';
+        if (targetPrice) {
+            const reward = Math.abs(targetPrice - entryPrice);
+            riskReward = (reward / priceDifference).toFixed(2) + ':1';
+        }
+
+        // Smart decimal formatting
+        const formatPrice = (price) => {
+            if (price >= 1000) return price.toLocaleString();
+            if (price >= 100) return price.toFixed(2);
+            if (price >= 10) return price.toFixed(3);
+            if (price >= 1) return price.toFixed(4);
+            return price.toFixed(6);
+        };
+
+        const formatPosition = (size) => {
+            if (size >= 1000000) return size.toLocaleString(undefined, {maximumFractionDigits: 0});
+            if (size >= 1000) return size.toLocaleString(undefined, {maximumFractionDigits: 1});
+            if (size >= 100) return size.toFixed(1);
+            if (size >= 10) return size.toFixed(2);
+            if (size >= 1) return size.toFixed(3);
+            return size.toFixed(4);
+        };
+
+        // Format results
+        const resultText = `POSITION CALCULATION RESULTS
+─────────────────────────────
+Account Size: $${accountSize.toLocaleString()}
+Risk Amount: $${riskDollars.toLocaleString()}
+Risk Percentage: ${riskPercentage.toFixed(2)}%
+
+Entry Price: $${formatPrice(entryPrice)}
+Stop Loss: $${formatPrice(stopLoss)}
+${targetPrice ? `Target Price: $${formatPrice(targetPrice)}` : ''}
+
+MAX POSITION SIZE: ${formatPosition(positionSize)} units
+Total Investment: $${totalValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+Risk/Reward Ratio: ${riskReward}
+─────────────────────────────`;
+
+        document.getElementById('result').textContent = resultText;
+        document.getElementById('result').classList.remove('hidden');
     }
+
+    function showError(message) {
+        document.getElementById('error').textContent = `ERROR: ${message}`;
+        document.getElementById('error').classList.remove('hidden');
+        document.getElementById('defaultMessage').classList.remove('hidden');
+    }
+
+    function clearForm() {
+        document.getElementById('calculatorForm').reset();
+        document.getElementById('result').classList.add('hidden');
+        document.getElementById('error').classList.add('hidden');
+        document.getElementById('defaultMessage').classList.remove('hidden');
+    }
+
+    // Add some interactive effects
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.boxShadow = '0 0 15px rgba(0, 255, 0, 0.5)';
+            });
+            input.addEventListener('blur', function() {
+                this.style.boxShadow = 'none';
+            });
+        });
+    });
 </script>
 </body>
 </html>
