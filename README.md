@@ -19,16 +19,18 @@ A Spring Boot web application for calculating optimal trading position sizes bas
 **🌐**: [tradingpositionsizecalculator.com](https://www.tradingpositionsizecalculator.com/)
 
 ## Tech Stack
-- **Backend**: Java 17, Spring Boot 3.x
-- **Frontend**: Thymeleaf, CSS3, HTML5
-- **Deployment**: Railway, Cloudflare
-- **DNS/SSL**: Cloudflare
+- **Backend**: Java 17, Spring Boot 3.5.7, Maven
+- **Frontend**: HTML5, CSS3, JavaScript
+- **Deployment**: Railway (PaaS), Cloudflare (CDN/SSL)
 
 ## Future Roadmap 
+- Bug fixes and improvements
+- Java version upgrade (17 → 21/LTS)
+- CSS architecture refactor (modular structure)
 - Android version in development (Java/Kotlin)
 - iOS version planned (Swift/SwiftUI)
 - Binance API integration for live market data
-- Progressive Web App (PWA) features for mobile experience
+- Progressive Web App (PWA) for enhanced mobile experience
 
 ## Quick Start
 
