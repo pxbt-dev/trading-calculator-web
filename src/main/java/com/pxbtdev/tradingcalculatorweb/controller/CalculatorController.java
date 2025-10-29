@@ -3,7 +3,6 @@ package com.pxbtdev.tradingcalculatorweb.controller;
 import com.pxbtdev.tradingcalculatorweb.model.TradeParameters;
 import com.pxbtdev.tradingcalculatorweb.model.PositionResult;
 import com.pxbtdev.tradingcalculatorweb.service.PositionSizeService;
-import com.pxbtdev.tradingcalculatorweb.service.RiskAnalysisService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.stereotype.Controller;
@@ -19,13 +18,11 @@ import java.text.DecimalFormat;
 public class CalculatorController {
 
     private final PositionSizeService positionService;
-    private final RiskAnalysisService riskService;
     private final DecimalFormat currencyFormat = new DecimalFormat("$#,##0.00");
     private final DecimalFormat percentFormat = new DecimalFormat("0.##%");
 
     public CalculatorController() {
         this.positionService = new PositionSizeService();
-        this.riskService = new RiskAnalysisService();
     }
 
     @GetMapping("/")
