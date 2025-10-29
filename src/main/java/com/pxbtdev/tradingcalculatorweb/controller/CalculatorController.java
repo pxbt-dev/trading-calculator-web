@@ -4,6 +4,8 @@ import com.pxbtdev.tradingcalculatorweb.model.TradeParameters;
 import com.pxbtdev.tradingcalculatorweb.model.PositionResult;
 import com.pxbtdev.tradingcalculatorweb.service.PositionSizeService;
 import com.pxbtdev.tradingcalculatorweb.service.RiskAnalysisService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.text.DecimalFormat;
 
 @Controller
+@Tag(name = "Trading Calculator", description = "Position size calculation APIs")
 public class CalculatorController {
 
     private final PositionSizeService positionService;
@@ -35,6 +38,7 @@ public class CalculatorController {
         return "index";
     }
 
+    @Operation(summary = "Calculate position size")
     @PostMapping("/calculate")
     public String calculatePosition(
             @RequestParam String accountSizeStr,    // Changed to String for decimal detection
