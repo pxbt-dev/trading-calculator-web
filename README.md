@@ -8,7 +8,7 @@ A Spring Boot web application for calculating optimal trading position sizes bas
 
 ## Features ✨
 
-- **🎯 Position Sizing**: Calculate optimal units to buy based on account size and risk tolerance
+- **🎯 Position Sizing**: Calculate max units that are able to be bought based on account size and risk tolerance
 - **📊 Risk Analysis**: Risk/reward calculations
 - **🌐 Web Interface**: Accessible from any device with a browser
 - **📱 Responsive Design**: Works on desktop, tablet, and mobile
@@ -24,13 +24,17 @@ A Spring Boot web application for calculating optimal trading position sizes bas
 - **Deployment**: Railway (PaaS), Cloudflare (CDN/SSL)
 
 ## Future Roadmap 
-- Bug fixes and improvements
-- Java version upgrade (17 → 21/LTS)
-- CSS architecture refactor (modular structure)
-- Android version in development (Java/Kotlin)
-- iOS version planned (Swift/SwiftUI)
-- Binance API integration for live market data
-- Progressive Web App (PWA) for enhanced mobile experience
+- Bug fixes
+  - clean code / structure up (.css for e.g)
+  - Fix formatting issues on mobile,
+  - Add tab to calculate Short position
+- improvements
+  - Java version upgrade (17 → 21/LTS)
+  - CSS architecture refactor (modular structure)
+  - Android version in development (Java/Kotlin)
+  - iOS version planned (Swift/SwiftUI)
+  - Binance API integration for live market data
+  - Progressive Web App (PWA) for enhanced mobile experience
 
 ## Quick Start
 
