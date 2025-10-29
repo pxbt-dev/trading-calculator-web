@@ -25,13 +25,10 @@ A Spring Boot web application for calculating optimal trading position sizes bas
 - **Deployment**: Railway (PaaS), Cloudflare (CDN/SSL)
 
 ## Future Roadmap 
-- Bug fixes
-  - clean code / structure up (.css for e.g)
-  - Fix formatting issues on mobile
-  - Add tab to calculate Short position
+- Bug fixes 
 - improvements
   - Java version upgrade (17 → 21/LTS)
-  - CSS architecture refactor (modular structure)
+  - Add tab to calculate Short position
   - Android version in development (Java/Kotlin)
   - iOS version planned (Swift/SwiftUI)
   - Binance API integration for live market data
