@@ -14,9 +14,6 @@ A Spring Boot web application for calculating optimal trading position sizes bas
 
 - **🎯 Position Sizing**: Calculate max units that are able to be bought based on account size and risk tolerance
 - **📊 Risk Analysis**: Risk/reward calculations
-- **🌐 Web Interface**: Accessible from any device with a browser
-- **📱 Responsive Design**: Works on desktop, tablet, and mobile
-- **⚡ Single-Page**: Results display on the same page without reloading
 
 ## Live 🚀
 
