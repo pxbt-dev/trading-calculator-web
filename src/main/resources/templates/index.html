@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
     <title>Trading Position Size Calculator</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="/css/style.css">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%2300ff00'/><text x='50' y='60' font-family='monospace' font-size='60' text-anchor='middle' fill='%23000'>$</text></svg>">
 </head>
 <body>
@@ -17,34 +17,34 @@
 <div class="container">
     <!-- Left Column - Form -->
     <div class="form-column">
-        <form th:action="@{/calculate}" method="post">
+        <form id="calculatorForm">
             <div class="form-group">
                 <label>Account Size ($):</label>
-                <input type="number" name="accountSizeStr" step="any" required placeholder="Enter account size...">
+                <input type="number" id="accountSize" step="any" required placeholder="Enter account size...">
             </div>
 
             <div class="form-group">
                 <label>Amount to Risk ($):</label>
-                <input type="number" name="riskDollarsStr" step="any" required placeholder="Enter risk amount...">
+                <input type="number" id="riskDollars" step="any" required placeholder="Enter risk amount...">
             </div>
 
             <div class="form-group">
                 <label>Entry Price:</label>
-                <input type="number" name="entryPriceStr" step="any" required placeholder="Enter entry price...">
+                <input type="number" id="entryPrice" step="any" required placeholder="Enter entry price...">
             </div>
 
             <div class="form-group">
                 <label>Stop Loss Price:</label>
-                <input type="number" name="stopLossStr" step="any" required placeholder="Enter stop loss...">
+                <input type="number" id="stopLoss" step="any" required placeholder="Enter stop loss...">
             </div>
 
             <div class="form-group">
                 <label>Target Price (optional):</label>
-                <input type="number" name="targetPriceStr" step="any" placeholder="Enter target price...">
+                <input type="number" id="targetPrice" step="any" placeholder="Enter target price...">
             </div>
 
             <div class="button-group">
-                <button type="submit">CALCULATE</button>
+                <button type="button" onclick="calculatePosition()">CALCULATE</button>
                 <button type="button" onclick="clearForm()">CLEAR</button>
             </div>
         </form>
@@ -53,27 +53,16 @@
     <!-- Right Column - Results -->
     <div class="results-column">
         <div class="result-panel">
-            <div th:if="${result != null}" class="result-content">
-                POSITION CALCULATION RESULTS
-                ─────────────────────────────
-                Account Size: <span th:text="${formattedAccountSize}"></span>
-                Risk Amount: <span th:text="${formattedRiskDollars}"></span>
-                Risk Percentage: <span th:text="${formattedRiskPercentage}"></span>
-
-                Entry Price: <span th:text="${formattedEntryPrice}"></span>
-                Stop Loss: <span th:text="${formattedStopLoss}"></span>
-                <span th:if="${hasTarget}">Target Price: <span th:text="${formattedTargetPrice}"></span></span>
-
-                MAX POSITION SIZE: <span th:text="${formattedPositionSize}"></span> units
-                Total Investment: <span th:text="${formattedTotalInvestment}"></span>
-                Risk/Reward Ratio: <span th:text="${formattedRiskReward}"></span>
-                ─────────────────────────────
+            <div id="result" class="result-content hidden"></div>
+            <div id="defaultMessage" class="result-content">
+Enter your trading parameters and click CALCULATE to see your MAXIMUM position size based on the input risk metrics.
+─────────────────────────────────────────
+Note: This is a risk calculation, not a trading recommendation.
             </div>
-            <div th:unless="${result != null}" class="result-content" th:text="${defaultMessage}"></div>
         </div>
     </div>
 
-    <div th:if="${error}" class="error" th:text="${'ERROR: ' + error}"></div>
+    <div id="error" class="error hidden"></div>
 </div>
 
 <div class="terminal-footer">
@@ -81,11 +70,122 @@
 </div>
 
 <script>
-    function clearForm() {
-        document.querySelector('form').reset();
-        window.location.href = '/';
+    async function calculatePosition() {
+        // Clear previous results
+        hideElement('result');
+        hideElement('error');
+        showElement('defaultMessage');
+
+        // Get input values - DON'T include targetPrice if empty
+        const request = {
+            accountSize: parseFloat(document.getElementById('accountSize').value),
+            riskDollars: parseFloat(document.getElementById('riskDollars').value),
+            entryPrice: parseFloat(document.getElementById('entryPrice').value),
+            stopLoss: parseFloat(document.getElementById('stopLoss').value)
+            // targetPrice is NOT included here initially
+        };
+
+        // Only add targetPrice if it has a REAL value
+        const targetPriceInput = document.getElementById('targetPrice').value;
+        if (targetPriceInput && targetPriceInput.trim() !== '') {
+            request.targetPrice = parseFloat(targetPriceInput);
+        }
+
+        // Basic validation
+        if (Object.values(request).some(v => isNaN(v) || v <= 0)) {
+            showError('Please fill in all required fields with valid values');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/calculate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(request)
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                showError(data.error || 'Calculation failed');
+                return;
+            }
+
+            displayResults(request, data);
+
+        } catch (error) {
+            showError('Network error: ' + error.message);
+        }
     }
 
+    function displayResults(inputs, result) {
+        const entryPriceStr = document.getElementById('entryPrice').value;
+        const stopLossStr = document.getElementById('stopLoss').value;
+        const targetPriceStr = document.getElementById('targetPrice').value;
+
+        const resultText = `POSITION CALCULATION RESULTS
+─────────────────────────────
+Account Size: ${formatDynamicCurrency(inputs.accountSize, document.getElementById('accountSize').value)}
+Risk Amount: ${formatDynamicCurrency(inputs.riskDollars, document.getElementById('riskDollars').value)}
+Risk Percentage: ${result.riskPercentage.toFixed(2)}%
+
+Entry Price: ${formatDynamicCurrency(inputs.entryPrice, entryPriceStr)}
+Stop Loss: ${formatDynamicCurrency(inputs.stopLoss, stopLossStr)}
+${targetPriceStr ? `Target Price: ${formatDynamicCurrency(inputs.targetPrice, targetPriceStr)}` : ''}
+
+MAX POSITION SIZE: ${formatDynamicPosition(result.unitsToBuy)} units
+Total Investment: ${formatCurrency(result.totalPositionSize)}
+Risk/Reward Ratio: ${result.riskRewardRatio || 'N/A'}
+─────────────────────────────`;
+
+        document.getElementById('result').textContent = resultText;
+        showElement('result');
+        hideElement('defaultMessage');
+    }
+
+    function formatDynamicCurrency(value, inputStr) {
+        const decimals = inputStr.includes('.') ? inputStr.split('.')[1].length : 0;
+        return formatCurrency(value, decimals);
+    }
+
+    function formatCurrency(value, decimals = 2) {
+        return '$' + value.toLocaleString('en-US', {
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals
+        });
+    }
+
+    function formatDynamicPosition(size) {
+        if (size >= 1000000) return size.toLocaleString('en-US', {maximumFractionDigits: 0});
+        if (size >= 1000) return size.toLocaleString('en-US', {maximumFractionDigits: 1});
+        if (size >= 100) return size.toFixed(1);
+        if (size >= 10) return size.toFixed(2);
+        if (size >= 1) return size.toFixed(3);
+        return size.toFixed(4);
+    }
+
+    function showError(message) {
+        document.getElementById('error').textContent = 'ERROR: ' + message;
+        showElement('error');
+        showElement('defaultMessage');
+    }
+
+    function showElement(id) {
+        document.getElementById(id).classList.remove('hidden');
+    }
+
+    function hideElement(id) {
+        document.getElementById(id).classList.add('hidden');
+    }
+
+    function clearForm() {
+        document.getElementById('calculatorForm').reset();
+        hideElement('result');
+        hideElement('error');
+        showElement('defaultMessage');
+    }
+
+    // Interactive effects
     document.addEventListener('DOMContentLoaded', function() {
         const inputs = document.querySelectorAll('input');
         inputs.forEach(input => {
