@@ -1,6 +1,6 @@
 # Trading Position Size Calculator Web App 🌐
 
-A Spring Boot web application for calculating optimal trading position sizes based on risk management principles.
+An experimental Spring Boot web application for calculating optimal trading position sizes based on risk management principles.
 
 ![Java](https://img.shields.io/badge/Java-17-ED8B00?logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.7-6DB33F?logo=springboot&logoColor=white)
